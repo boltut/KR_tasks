@@ -24,20 +24,20 @@ main()
   	{
   		  if(c != ' ' && c != '\n' && c != '\t' && c != EOF)
 		    {
-          if(state == OUT)
-          {
-            n = 0;
-          }
-          state = IN;
-          ++n;     // считаю буквы в слове
-        }
-        else
-        {
-          state = OUT;
-          ++wordlong[n]; // пишу кол-во слов в массив
-        }
+          		if(state == OUT)
+          	          {
+            				n = 0;
+          		  }
+          		state = IN;
+          		++n;     // считаю буквы в слове
+                    }
+                  else
+        	   {
+          		state = OUT;
+          		++wordlong[n]; // пишу кол-во слов в массив
+        	   }
 
-    }   
+    	}   
 
     printf("\n");
 
