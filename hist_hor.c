@@ -7,7 +7,6 @@
 main()
 {
   int c, state, i, j;
-  int wordtype[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; // типы слов по длине
   int wordlong[10]; // массив длинами слов
   int n;// кол-во букв в слове
 
@@ -40,7 +39,7 @@ main()
     for(i = 1; i < 10; ++i)
       {
 
-        printf("%d ", wordtype[i]);
+        printf("%d ", i);
         if(wordlong[i] == 0)
         {
           printf("\n");
