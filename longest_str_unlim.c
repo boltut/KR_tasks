@@ -36,7 +36,7 @@ main()
     printf("Max dlina stroki\n");
     if(max > MAXLINE)
     {
-      printf("%s...\n", longest);
+      printf("%s..\n", longest);
     }
     else
     {
@@ -77,4 +77,3 @@ void copy (char to[], char from[])
     ++i;
   }
 }
-112222222
