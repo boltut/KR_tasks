@@ -27,14 +27,14 @@ main()
       copy(longest, line);
     }
   }
-  if(max<MAXLINE) // вычитаем нулевой символ вставленный в mygetline
+  if(max < MAXLINE) // вычитаем нулевой символ вставленный в mygetline
   {
     --max;
   }
   if(max > 0) // была не пустая строка
   {
     printf("Max dlina stroki\n");
-    if(max>MAXLINE)
+    if(max > MAXLINE)
     {
       printf("%s...\n", longest);
     }
