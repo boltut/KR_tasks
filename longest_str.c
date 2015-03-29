@@ -20,14 +20,12 @@ main()
       max = len;
       copy(longest, line);
     }
-    if(max > 0) // была не пустая строка
-    {
-      printf("%s", longest);
-
-    }
+  }  
+  if(max > 0) // была не пустая строка
+  {
+    printf("%s", longest);
   }
   return 0;
-
 }
 
 /*getline: считывает строку в s, возвращает ее длину*/
