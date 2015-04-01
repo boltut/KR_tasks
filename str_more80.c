@@ -38,15 +38,3 @@ int mygetline(char s[])
     s[i] = '\0';
     return i;
 }
-
-/*copy: копирует строку 'from' в 'to'; длина to считается достаточной*/
-/*void copy (char to[], char from[])
-{
-  int i;
-
-  i = 0;
-  while((to[i] = from[i]) != '\0')
-  {
-    ++i;
-  }
-}*/
