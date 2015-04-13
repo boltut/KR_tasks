@@ -1,0 +1,155 @@
+//Функция принимающая на вход массив размером 100 элементов
+//с рандомными чисалми и признак сортировки (Bubble\Insertion),
+//возвращает отсортированный массив нечетных чисел
+#include <stdio.h>
+#define INSERTION 0
+#define BUBBLE 1
+
+void array_sort(int array[], int sign);
+void insertion_sort(int array[]);
+void bubble_sort(int array[]);
+void super_printf(int any_array[], int lim);
+
+int main()
+{
+  //Массив для рандомных чисел
+  int array[100];
+  int i;
+  //Массив, хранящий выбор сортировки
+  char sortname[10];
+
+  // заполняю массив рандомными числами
+  for(i = 0; i < 100; ++i) {
+    array[i] = rand() % 100;
+  }
+  printf("\nPlease, select a sorting algorithm: Bubble/Insertion (B/I)");
+  scanf("%s", sortname);
+  if(sortname[0] == 'b' || sortname[0] == 'B') {
+    array_sort(array, BUBBLE);  
+  } else if(sortname[0] == 'i' || sortname[0] =='I') {
+    array_sort(array, INSERTION);
+  }
+  
+  
+  return 0;
+}
+//Сортировка вставками: принимаем массив с рандомными числами
+//отдаем отсортированный массив с нечетными числами
+void insertion_sort(int array[])
+{
+  int i, j, key, temp;
+  //массив в который положим нечетные числа
+  int array_odd[100];
+  //указатель на первый элемент массива
+  int *pt;
+  pt = array;
+  //кол-во нечетных чисел(элементов нового массива)
+  int odd = 0;
+  
+  //Через указатели выберем нечетые числа из массива array
+  //и запишем их в новый массив array_odd
+  for(i = 0; i < 100; ++i) {
+    if(*(pt + i)&1 != 0) {
+      ++odd;
+      //odd-1, чтобы начать с 0-ого индекса
+      array_odd[odd - 1] = *(pt + i); 
+    }
+  }
+  //Тело сортировки: сортитуем нечетные числа в array_odd
+  for(i = 1; i < (odd - 1); ++i) {
+    key = i + 1;
+    temp = array_odd[key];
+    for(j = i + 1; j > 0; --j) {
+      if (temp < array_odd[j - 1]) {
+        array_odd[j] = array_odd[j - 1];
+        key = j - 1;
+      }
+    }
+    array_odd[key] = temp;
+  }
+  //Вывод исходного массива с рандомными числами
+  printf("\nBefore insertion sorting\n");
+  super_printf(array, 100);
+  printf("\n");
+  //Вывод на экран отсортированного массива
+  //нечетных чисел
+  printf("After insertion sorting\n");
+  super_printf(array_odd, odd);
+  printf("\n");
+  
+}
+//Сортировка пузырьком: принимаем массив рандомных чисел,
+//отдаем отсортированный массив нечетных чисел
+void bubble_sort(int array[])
+{
+  int i, j, temp;
+  //массив в который положим нечетные числа
+  int array_odd[100];
+  //указатель на первый элемент массива
+  int *pt;
+  pt = array;
+  //кол-во нечетных чисел
+  int odd = 0;
+  
+  //Через указатели выберем нечентые числа из массива array
+  //и запишем их в новый массив array_odd
+  for(i = 0; i < 100; ++i) {
+    if(*(pt + i)&1 != 0) {
+      ++odd;
+      //odd-1, чтобы начать с 0-ого индекса
+      array_odd[odd - 1] = *(pt + i); 
+    }
+  }
+  //Тело сортировки: сортируем нечетные числа в array_odd
+  for(i = (odd - 1); i >= 0; --i) {
+    for(j = 0; j < i; ++j) {
+      if(array_odd[j] > array_odd[j + 1]) {
+        temp = array_odd[j];
+        array_odd[j] = array_odd[j + 1];
+        array_odd[j + 1] = temp;
+      }
+    }
+  }
+  //Вывод исходного массива с рандомными числами
+  printf("\nBefore bubble sorting\n");
+  super_printf(array, 100);
+  printf("\n");
+  //Вывод на экран отсортированного массива
+  //нечетных чисел
+  printf("After bubble sorting\n");
+  super_printf(array_odd, odd);
+  printf("\n");
+}
+//Функция принимающая на вход массив размером 100 элементов
+//с рандомными чисалми и признак сортировки (Bubble\Insertion),
+//возвращает отсортированный массив нечетных чисел
+void array_sort(int array[], int sign)
+{
+  if(sign == INSERTION) {
+    insertion_sort(array);
+  } else {
+    bubble_sort(array);
+  }
+
+}
+//Решил написать отдельную функцию, для удобного отображения
+//массивов с длиной строки 10 символов, с ровными столбцами
+void super_printf(int any_array[], int lim)
+{
+  int i;
+  int n = 0;
+  for (i = 0; i < lim; ++i) {
+    ++n;
+    //Выравниваем столбцы доп. пробелом, пока число
+    //состоит из 1-ого символа (<10)
+    if(any_array[i] < 10) {
+      printf("%d  ", any_array[i]);
+    } else {
+        printf("%d ", any_array[i]);
+        if(n == 10) {
+        printf("\n");
+        n = 0;
+        }
+      } 
+  }
+}
