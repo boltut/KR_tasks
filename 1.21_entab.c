@@ -36,7 +36,6 @@ main()
       }
     }
     else {
-      
       n_residue_spaces = m % 8;
       ntabs = m / 8;
       printf("result\n");
