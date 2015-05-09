@@ -6,18 +6,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define OPTIMAL_LINE 6
+#define OPTIMAL_LINE 30
 #define IN_SPACES 1
 #define OUT_SPACES 0
 
 void foldig_lines(void);
 void reworking_last_block(char s[], int len);
-void enter_n_in_line(char s[], char key[], int count);
-int next_line(char s[], int len, int pos);
+void enter_n_in_line(char s[], int key[], int count, int other_spaces);
+int next_line(char s[], int len, int pos, int other_spaces);
 int mygetline(char s[], char for_count []);
 int find_last_major_symbol(char s[]);
 int first_space(char s[]);
 
+int other_spaces;
 int short_line;
 
 int main(void)
@@ -27,7 +28,7 @@ int main(void)
 }
 void foldig_lines(void)
 {
-  int i, j, fda;
+  int i, j;
   // последний значащий символ в новой строке,
   // после которого осуществляется перенос
   int last_symbol;
@@ -35,13 +36,11 @@ void foldig_lines(void)
   int key_symbol;
   // длина текущей строки
   int len;
-  //
-  int first_sp;
-  // счетчик пробелов при печати результата
-  int space_count;
   // показывает, сколько раз содержится в 
   // строке по OPTIMAL_LINE
   extern int short_line; 
+  //кол-во пробелов
+  extern int other_spaces;
   // 
   int last_symbols_count;
   // текущая строка
@@ -49,25 +48,26 @@ void foldig_lines(void)
   // строка для подсчета числа переносов
   char for_count[1000];
   // массив с ключевыми символвами для переносов
-  char key[1000];
+  int key[1000];
   // длина строки для подсчета числа переносов
   int len_for_count;
 
   while((len = mygetline(line, for_count)) > 0) {
 
     last_symbols_count = 0;
+    // если строка недостаточно длинная для переноса
+    // просим ввести более длинную
     if(short_line == 0) {
       printf("please, enter line >= OPTIMAL_LINE\n");
       break;
     }
-
-    
 
     // вычисляем значащие символы для всей строки
     // и записываем их в массив
     len_for_count = len;
     for(i = 0; len_for_count > OPTIMAL_LINE; ++i) {
       last_symbol = find_last_major_symbol(for_count);
+      
       // обрабатываю nospace блоки
       if(last_symbol == 0) {
         last_symbol = first_space(for_count);
@@ -77,26 +77,20 @@ void foldig_lines(void)
         key[i] = last_symbol;   
       }
       if(i > 0) {
-        key[i] = last_symbol; 
-        key[i] = key[i] + key[i - 1] + 2;
+        key[i] = last_symbol + key[i - 1] + 2;
       }
-      len_for_count = next_line(for_count, len_for_count, last_symbol);
+      len_for_count = next_line(for_count, len_for_count, last_symbol, other_spaces);
+      
+      
       ++last_symbols_count;
 
     }
-
-
-    printf("NEW %d\n", last_symbols_count);
     
-    for(i = 0; i < last_symbols_count; ++i) {
-      printf("%d ", key[i]);
-    } printf("\n");
-
-    enter_n_in_line(line, key, last_symbols_count);
+    // записываем символы конца строки для переносов
+    enter_n_in_line(line, key, last_symbols_count, other_spaces);
 
     // печатаем результат
     for(i = 0; i < len; ++i) {
-      // ограничим печать пробелов до 1
       printf("%c", line[i]);
     }
   }
@@ -106,6 +100,8 @@ void foldig_lines(void)
 int mygetline(char s[], char for_count [])
 {
   int c, i;
+  // смотрим, не короче ли строка чем
+  // OPTIMAL_LINE
   extern int short_line; 
   
   for(i = 0; (c = getchar()) != EOF && c != '\n'; ++i)
@@ -129,12 +125,15 @@ int mygetline(char s[], char for_count [])
 
   return i;
 }
-// ищем последний символ последнего слова
+// ищем последний символ последнего слова 
 // в пределах OPTIMAL_LINE
 int find_last_major_symbol(char s[]) 
 {
   // для игнора '\0'
   int i = 1;
+  // кол-во пробелов
+  extern int other_spaces;
+  other_spaces = 0;
   // тут последняя буква последнго слова
   // в пределах OPTIMAL_LINE
 
@@ -146,6 +145,7 @@ int find_last_major_symbol(char s[])
   while(i <= OPTIMAL_LINE) {
     if(s[OPTIMAL_LINE-i] == ' ') {
       state = IN_SPACES;
+      ++other_spaces;
     }
     if(s[OPTIMAL_LINE-i] != ' ' && state == IN_SPACES) {
       last_major_symbol_pos = OPTIMAL_LINE - i;
@@ -164,15 +164,15 @@ int find_last_major_symbol(char s[])
 // функциоей find_last_major_symbol 
 // переписываеет строку без первой части,
 // возвращает длину новой строки
-int next_line(char s[], int len, int pos)
+int next_line(char s[], int len, int pos, int other_spaces)
 {
   int j;
   int new_len;
   
-  new_len = len - (pos + 2);
+  new_len = len - (pos + other_spaces + 1);
   
   for(j = 0; j <= new_len; ++j) {
-      s[j] = s[pos + 2 + j];
+      s[j] = s[pos + other_spaces + 1 + j];
     }
   
  return new_len;
@@ -191,19 +191,12 @@ int first_space(char s[])
   return (i - 1);
 }
 // вводим в строку line '\n' в места переносов
-void enter_n_in_line(char s[], char key[], int count)
+void enter_n_in_line(char s[], int key[], int count, int other_spaces)
 {
   int i;
   for(i = 0; i < count; ++i) {
-    s[key[i] + 1] = '\n';
+    s[key[i] + other_spaces] = '\n';
   }
 
 }
-
-
-
-
-
-
-
 
