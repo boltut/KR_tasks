@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define OPTIMAL_LINE 30
+#define OPTIMAL_LINE 20
 #define IN_SPACES 1
 #define OUT_SPACES 0
 
